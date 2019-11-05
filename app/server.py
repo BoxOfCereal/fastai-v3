@@ -9,19 +9,22 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://www.dropbox.com/s/6bgq8t6yextloqp/export.pkl?raw=1'
+export_file_url = 'https://drive.google.com/uc?export=download&id=1poH2oEKxIJozzKVCAGtrigc6F-iKAPBJ'
 export_file_name = 'export.pkl'
 
-classes = ['black', 'grizzly', 'teddys']
+classes = ['cn1s', 'cn1srp', 'cn1srp6', 'i-210+n',
+           'kv', 'kv2c', 'kv2c_a_base', 'cp1sd']
 path = Path(__file__).parent
 
 app = Starlette()
-app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
+app.add_middleware(CORSMiddleware, allow_origins=[
+                   '*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
 
 
 async def download_file(url, dest):
-    if dest.exists(): return
+    if dest.exists():
+        return
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             data = await response.read()
